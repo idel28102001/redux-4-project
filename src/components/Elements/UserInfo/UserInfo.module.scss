@@ -1,0 +1,30 @@
+@use '@/style-utils' as u;
+
+.root {
+  grid-area: user;
+  display: flex;
+  gap: u.rem(12);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.title {
+  line-height: u.rem(18);
+  font-size: u.rem(18);
+}
+
+.date {
+  line-height: u.rem(12);
+  font-size: u.rem(12);
+  color: map-get(u.$palette, color-black-4);
+}
+
+.img {
+  display: flex;
+  height: u.rem(46);
+  width: u.rem(46);
+}

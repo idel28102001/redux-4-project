@@ -1,0 +1,16 @@
+@use '@/style-utils' as u;
+
+.root {
+  padding-top: u.rem(26);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  max-width: u.rem(941);
+  padding-bottom: u.rem(24);
+  flex-grow: 1;
+}
+
+.isModal {
+  padding-top: u.rem(59);
+  max-width: u.rem(384);
+}

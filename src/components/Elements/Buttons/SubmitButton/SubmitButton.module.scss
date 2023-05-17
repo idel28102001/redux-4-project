@@ -1,0 +1,10 @@
+@use '@/style-utils/index' as u;
+
+.root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: u.rem(8);
+  height: unset;
+}

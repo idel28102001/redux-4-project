@@ -1,0 +1,13 @@
+@use '@/style-utils/index' as u;
+
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: u.rem(5);
+}
+
+.amount {
+  color: map-get(u.$palette, color-black-3);
+  font-size: u.rem(12);
+}

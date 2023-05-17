@@ -1,0 +1,38 @@
+@use '@/style-utils' as u;
+
+.root {
+  grid-area: intro;
+  display: flex;
+  flex-direction: column;
+  gap: u.rem(6);
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  gap: u.rem(13);
+  align-items: center;
+}
+
+.link {
+  color: map-get(u.$palette, color-blue-1);
+  font-size: u.rem(20);
+  height: u.rem(26);
+
+  overflow: hidden;
+}
+
+.description {
+  color: map-get(u.$palette, color-black-3);
+  margin: 0;
+  padding: 0;
+  line-height: u.rem(22);
+  font-size: u.rem(12);
+  text-overflow: ellipsis;
+  max-height: u.rem(45);
+}
+
+.isOpened {
+  color: map-get(u.$palette, color-black-4);
+}
+

@@ -1,0 +1,15 @@
+@use '@/style-utils/index' as u;
+
+.root {
+  background-color: map-get(u.$palette, color-white-1);
+  border-radius: u.rem(5);
+  height: 100%;
+  width: 100%;
+  box-shadow: 0 u.rem(5) u.rem(9) 0 map-get(u.$palette, color-gray-2);
+  padding: u.rem(15) u.rem(14) u.rem(24) u.rem(19);
+}
+
+.form {
+  padding: u.rem(48) u.rem(32);
+  height: max-content;
+}

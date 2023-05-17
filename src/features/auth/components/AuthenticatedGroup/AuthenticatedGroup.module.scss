@@ -1,0 +1,24 @@
+@use '@/style-utils' as u;
+
+.root {
+  display: flex;
+  gap: u.rem(20);
+  align-items: center;
+}
+
+
+.signUp {
+  color: map-get(u.$palette, color-green-1) !important;
+  border-color: map-get(u.$palette, color-green-1) !important;
+  background-color: transparent !important;
+
+  &:hover {
+    color: map-get(u.$palette, color-green-2) !important;
+    border-color: map-get(u.$palette, color-green-2) !important;
+  }
+
+  &:active {
+    color: map-get(u.$palette, color-green-3) !important;
+    border-color: map-get(u.$palette, color-green-3) !important;
+  }
+}

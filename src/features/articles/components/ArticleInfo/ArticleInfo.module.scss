@@ -1,0 +1,13 @@
+@use '@/style-utils' as u;
+
+.root {
+  display: grid;
+  grid-template-columns: 1fr u.rem(155);
+  grid-template-rows: u.rem(30) 1fr;
+  gap: u.rem(71);
+  grid-template:
+          'intro user'
+          'intro edit';
+  justify-content: space-between;
+  align-items: flex-start;
+}

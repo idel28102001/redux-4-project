@@ -1,0 +1,15 @@
+@use '@/style-utils/index' as u;
+
+.root {
+  background: map-get(u.$palette, color-white-1);
+  display: flex;
+  justify-content: space-between;
+}
+
+.heading {
+  font-size: u.rem(18);
+}
+
+.link {
+  color: map-get(u.$palette, color-black-5);
+}
