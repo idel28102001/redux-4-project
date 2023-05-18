@@ -1,14 +1,14 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainLayout from '@/components/Layout/MainLayout';
 import ContentLayout from '@/components/Layout/ContentLayout';
-import ArticlesPage from '@/features/articles/components/ArticlesPage';
-import ArticlePage, { loader as articleLoader } from '@/features/articles/components/ArticlePage/ArticlePage.tsx';
+import lazyArticles from '@/features/articles/components/ArticlesPage';
 import ErrorPage from '@/features/error/components/ErrorPage';
 import NotFoundPage from '@/features/error/components/NotFoundPage';
-import SignInPage from '@/features/auth/components/SignInPage';
-import SignUpPage from '@/features/auth/components/SignUpPage';
-import ProfilePage from '@/features/auth/components/ProfilePage';
+import lazyProfile from '@/features/auth/components/ProfilePage';
 import FormLayout from '@/components/Layout/FormLayout';
+import lazyArticle from '@/features/articles/components/ArticlePage';
+import lazySignUp from '@/features/auth/components/SignUpPage';
+import lazySignIn from '@/features/auth/components/SignInPage';
 
 export const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -21,12 +21,14 @@ export const AppRoutes = () => {
           element: <ContentLayout isForm={false} />,
           errorElement: <ErrorPage />,
           children: [
-            { index: true, element: <ArticlesPage /> },
-            { path: 'articles', element: <ArticlesPage /> },
+            {
+              index: true,
+              lazy: lazyArticles,
+            },
+            { path: 'articles', lazy: lazyArticles },
             {
               path: 'articles/:slug',
-              element: <ArticlePage />,
-              loader: articleLoader,
+              lazy: lazyArticle,
             },
           ],
         },
@@ -40,15 +42,16 @@ export const AppRoutes = () => {
               children: [
                 {
                   path: 'sign-in',
-                  element: <SignInPage />,
+                  lazy: lazySignIn,
                 },
+
                 {
                   path: 'sign-up',
-                  element: <SignUpPage />,
+                  lazy: lazySignUp,
                 },
                 {
                   path: 'profile',
-                  element: <ProfilePage />,
+                  lazy: lazyProfile,
                 },
               ],
             },
@@ -62,5 +65,5 @@ export const AppRoutes = () => {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={router} fallbackElement={<MainLayout />} />;
 };

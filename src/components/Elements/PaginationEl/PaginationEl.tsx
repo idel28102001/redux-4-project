@@ -1,18 +1,22 @@
 import styles from './PaginationEl.module.scss';
 import { Pagination } from 'antd';
-
-export type SetPage = (page: number) => void;
+import { useNavigate } from 'react-router-dom';
 
 interface PaginationElProps {
-  setPage: SetPage;
   page: number;
   total: number;
 }
 
-const PaginationEl = ({ setPage, page, total }: PaginationElProps) => {
+const PaginationEl = ({ page, total }: PaginationElProps) => {
+  const navigate = useNavigate();
   return (
     <div className={styles.root}>
-      <Pagination current={page} total={total} onChange={(page) => setPage(page)} />
+      <Pagination
+        showSizeChanger={false}
+        current={page}
+        total={total}
+        onChange={(page) => navigate(`/articles?page=${page}`)}
+      />
     </div>
   );
 };

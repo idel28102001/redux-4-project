@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 export const useArticlesPage = () => {
   const { page, setPage, total } = useArticlesPagination();
-  const { items } = useAppSelector(selectArticles);
+  const { items, status } = useAppSelector(selectArticles);
   const dispatch = useAppDispatch();
   useEffect(() => {
     const controller = new AbortController();
@@ -14,5 +14,5 @@ export const useArticlesPage = () => {
       controller.abort();
     };
   }, [page, dispatch]);
-  return { page, setPage, total, items };
+  return { page, setPage, total, items, status };
 };

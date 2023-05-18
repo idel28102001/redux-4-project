@@ -6,6 +6,9 @@ const NotAuthenticatedGroup = () => {
   return (
     <>
       <Button type="text" size="large">
+        <Link to={'/profile'}>Profile</Link>
+      </Button>
+      <Button type="text" size="large">
         <Link to={'/sign-in'}>Sign In</Link>
       </Button>
       <GreenButton size="large">

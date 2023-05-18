@@ -18,9 +18,13 @@
   color: map-get(u.$palette, color-blue-1);
   font-size: u.rem(20);
   height: u.rem(26);
-
   overflow: hidden;
 }
+
+.linkNonActive {
+  pointer-events: none;
+}
+
 
 .description {
   color: map-get(u.$palette, color-black-3);

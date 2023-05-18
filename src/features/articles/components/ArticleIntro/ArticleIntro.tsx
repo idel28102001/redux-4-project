@@ -8,12 +8,13 @@ interface ArticleHeadProps {
   title: string;
   likesAmount: number;
   slug: string;
+  isNonActive: boolean;
 }
 
-const ArticleHead = ({ slug, title, likesAmount }: ArticleHeadProps) => {
+const ArticleHead = ({ isNonActive, slug, title, likesAmount }: ArticleHeadProps) => {
   return (
     <>
-      <Link to={`/articles/${slug}`} className={styles.link}>
+      <Link to={`/articles/${slug}`} className={classNames(styles.link, { [styles.linkNonActive]: isNonActive })}>
         {title}
       </Link>
       <LikeCounter amount={likesAmount} />
@@ -34,7 +35,7 @@ const ArticleIntro = ({ slug, likesAmount, title, tags, description, isOpened }:
   return (
     <div className={styles.root}>
       <div className={styles.header}>
-        <ArticleHead slug={slug} title={title} likesAmount={likesAmount} />
+        <ArticleHead isNonActive={isOpened} slug={slug} title={title} likesAmount={likesAmount} />
       </div>
       <Tags tags={tags} classStyle={classNames({ [styles.isOpened]: isOpened })} />
       <p className={classNames(styles.description, { [styles.isOpened]: isOpened })}>{description}</p>

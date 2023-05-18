@@ -2,7 +2,8 @@ import React from 'react';
 import LikeButton from '@/components/Elements/Buttons/LikeButton';
 import styles from './LikeCounter.module.scss';
 
-interface LikeCounterProps extends React.RefAttributes<HTMLButtonElement> {
+interface LikeCounterProps
+  extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   amount: number;
 }
 

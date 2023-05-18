@@ -1,0 +1,12 @@
+@use '@/style-utils' as u;
+
+.root {
+  position: relative;
+}
+
+.spin {
+  position: relative;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
