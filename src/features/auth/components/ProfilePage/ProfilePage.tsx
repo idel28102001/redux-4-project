@@ -1,14 +1,19 @@
 import FormWrapper from '@/components/Elements/FormWrapper';
 import { Form, Input } from 'antd';
 import { formRulesHandler } from '@/utils/formRulesHandler.ts';
+import { useAppSelector } from '@/hooks/useStoreHooks.ts';
+import { selectAuth } from '@/store/reducers/auth';
+import { useFormEdit } from '@/hooks/useFormEdit.ts';
 
 const ProfilePage = () => {
-  const username = 'John Doe';
-  const email = 'john@example.com';
-  const url = '';
+  const { user } = useAppSelector(selectAuth);
+  if (!user) throw new Error('There is no user');
+  const { onFinish, isLoading, errors } = useFormEdit();
+  console.log(errors);
+  const { username, email, image } = user;
 
   return (
-    <FormWrapper title="Edit Profile" submitText="Save">
+    <FormWrapper isLoading={isLoading} title="Edit Profile" submitText="Save" onFinish={onFinish}>
       <Form.Item
         label="Username"
         name="username"
@@ -19,7 +24,7 @@ const ProfilePage = () => {
       </Form.Item>
       <Form.Item
         label="Email address"
-        name="address"
+        name="email"
         rules={[
           formRulesHandler.required('Please input your email'),
           formRulesHandler.emailField(),
@@ -32,7 +37,7 @@ const ProfilePage = () => {
       <Form.Item label="New password" name="password" hasFeedback rules={[formRulesHandler.inRange('password', 6, 40)]}>
         <Input.Password placeholder="New password" />
       </Form.Item>
-      <Form.Item label="Avatar image (url)" name="avatar" rules={[formRulesHandler.urlField()]} initialValue={url}>
+      <Form.Item label="Avatar image (url)" name="image" rules={[formRulesHandler.urlField()]} initialValue={image}>
         <Input placeholder="Avatar image" />
       </Form.Item>
     </FormWrapper>

@@ -1,17 +1,24 @@
 import FormWrapper from '@/components/Elements/FormWrapper';
 import { formRulesHandler } from '@/utils/formRulesHandler.ts';
 import { Form, Input } from 'antd';
+import { FormSignInProps } from '@/store/reducers/auth';
+import { useSignIn } from '@/hooks/useFormAuth.ts';
 
 const SignInPage = () => {
+  const { errors, onFinish, isLoading } = useSignIn();
   return (
     <FormWrapper
+      onFinish={(e) => onFinish(e as never as FormSignInProps)}
+      isLoading={isLoading}
       title="Sign In"
       submitText="Login"
       extraLink={{ linkTo: '/sign-up', linkText: 'Sign Up', text: "Don' have an account?" }}
+      validateMessages={{ required: '123312312' }}
     >
       <Form.Item
+        {...errors['email or password']}
         label="Email address"
-        name="address"
+        name="email"
         rules={[
           formRulesHandler.required('Please input your email'),
           formRulesHandler.emailField(),
@@ -21,6 +28,7 @@ const SignInPage = () => {
         <Input placeholder="Email address" />
       </Form.Item>
       <Form.Item
+        {...errors['email or password']}
         label="Password"
         name="password"
         hasFeedback

@@ -2,9 +2,9 @@ import Axios, { InternalAxiosRequestConfig } from 'axios';
 import { API_URL } from '@/config';
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
-  const token: string | undefined = undefined;
+  const token: string | null = localStorage.getItem('token');
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Token ${token}`;
   }
   config.headers.Accept = '';
   return config;

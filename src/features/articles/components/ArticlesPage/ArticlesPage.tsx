@@ -1,26 +1,16 @@
 import styles from './ArticlesPage.module.scss';
 import Articles from '@/features/articles/components/Articles';
 import PaginationEl from '@/components/Elements/PaginationEl';
-import type { LoaderFunctionArgs } from 'react-router-dom';
-import { useLoaderData } from 'react-router-dom';
-import { GetArticles, getArticles } from '@/features/articles/api/getArticles.ts';
-import { getURLParam } from '@/utils/getURLParam.ts';
-
-type LoaderReturn = GetArticles & { page: number };
-
-export async function loader({ request }: LoaderFunctionArgs): Promise<LoaderReturn> {
-  const url = new URL(request.url);
-  const page = getURLParam(url, 'page', 1);
-  const response = await getArticles(page);
-  return { page, ...response.data };
-}
+import { useArticlesPage } from '@/hooks/useArticlesPage.ts';
+import Spinner from '@/components/Elements/Loaders/Spinner/Spinner.tsx';
 
 const ArticlesPage = () => {
-  const obj = useLoaderData() as never as LoaderReturn;
+  const { page, setPage, total, items, status } = useArticlesPage();
+  const content = status === 'loading' ? <Spinner /> : <Articles items={items} />;
   return (
     <div className={styles.root}>
-      <Articles items={obj.articles} />
-      <PaginationEl page={obj.page} total={obj.articlesCount} />
+      {content}
+      <PaginationEl page={page} total={total} onChange={setPage} />
     </div>
   );
 };

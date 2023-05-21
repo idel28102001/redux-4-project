@@ -1,4 +1,7 @@
-export default async function lazySignUp() {
-  const { action, default: Component } = await import('./SignUpPage.tsx');
-  return { action, Component };
-}
+import type { LazyRouteFunction, NonIndexRouteObject } from 'react-router-dom';
+
+const lazySignUp: LazyRouteFunction<NonIndexRouteObject> = async () => {
+  const { default: Component } = await import('./SignUpPage.tsx');
+  return { Component };
+};
+export default lazySignUp;

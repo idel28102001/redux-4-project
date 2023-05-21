@@ -9,6 +9,7 @@ import FormLayout from '@/components/Layout/FormLayout';
 import lazyArticle from '@/features/articles/components/ArticlePage';
 import lazySignUp from '@/features/auth/components/SignUpPage';
 import lazySignIn from '@/features/auth/components/SignInPage';
+import PageLoader from '@/components/Elements/Loaders/PageLoader/PageLoader.tsx';
 
 export const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -65,5 +66,5 @@ export const AppRoutes = () => {
     },
   ]);
 
-  return <RouterProvider router={router} fallbackElement={<MainLayout />} />;
+  return <RouterProvider router={router} fallbackElement={<PageLoader />} />;
 };
