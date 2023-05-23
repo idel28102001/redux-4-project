@@ -1,4 +1,4 @@
-import styles from './UserInfo.module.scss';
+import styles from './UserPreview.module.scss';
 import { Avatar } from 'antd';
 import { Author } from '@/features/articles/api/getArticles.ts';
 import { formatDate } from '@/utils/format.ts';
@@ -8,12 +8,12 @@ export interface UserExtraInfo {
   createdAt: string;
 }
 
-interface UserInfoProps {
+interface UserPreviewProps {
   extraInfo?: UserExtraInfo;
   author: Author;
 }
 
-const UserInfo = ({ author, extraInfo }: UserInfoProps) => {
+const UserPreview = ({ author, extraInfo }: UserPreviewProps) => {
   return (
     <div className={styles.root}>
       <div className={styles.info}>
@@ -25,4 +25,4 @@ const UserInfo = ({ author, extraInfo }: UserInfoProps) => {
   );
 };
 
-export default UserInfo;
+export default UserPreview;

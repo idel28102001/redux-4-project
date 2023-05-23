@@ -5,6 +5,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: u.rem(8);
+  padding: u.rem(8) !important;
   height: unset;
+}
+
+.article {
+  width: u.rem(319);
 }

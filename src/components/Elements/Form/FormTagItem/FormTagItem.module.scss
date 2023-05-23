@@ -1,0 +1,11 @@
+@use '@/style-utils/index' as u;
+
+.root {
+  height: u.rem(40);
+  display: flex;
+  gap: u.rem(18);
+}
+
+.input {
+  width: u.rem(300);
+}

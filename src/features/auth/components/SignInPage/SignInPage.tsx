@@ -1,4 +1,4 @@
-import FormWrapper from '@/components/Elements/FormWrapper';
+import FormWrapper from '../../../../components/Elements/Form/FormWrapper';
 import { formRulesHandler } from '@/utils/formRulesHandler.ts';
 import { Form, Input } from 'antd';
 import { FormSignInProps } from '@/store/reducers/auth';

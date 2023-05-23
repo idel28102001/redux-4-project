@@ -1,70 +1,74 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import MainLayout from '@/components/Layout/MainLayout';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import lazyMainLayout from '@/components/Layout/MainLayout';
 import ContentLayout from '@/components/Layout/ContentLayout';
 import lazyArticles from '@/features/articles/components/ArticlesPage';
 import ErrorPage from '@/features/error/components/ErrorPage';
 import NotFoundPage from '@/features/error/components/NotFoundPage';
-import lazyProfile from '@/features/auth/components/ProfilePage';
 import FormLayout from '@/components/Layout/FormLayout';
 import lazyArticle from '@/features/articles/components/ArticlePage';
-import lazySignUp from '@/features/auth/components/SignUpPage';
-import lazySignIn from '@/features/auth/components/SignInPage';
 import PageLoader from '@/components/Elements/Loaders/PageLoader/PageLoader.tsx';
+import { useMemo } from 'react';
+import { selectAuth } from '@/store/reducers/auth';
+import { useAppSelector } from '@/hooks/useStoreHooks.ts';
+import { useAuthorization } from '@/hooks/useAuthorization.ts';
+import { privateRoutes } from '@/routes/privateRoutes.ts';
+import { publicRoutes } from '@/routes/publicRoutes.ts';
 
 export const AppRoutes = () => {
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <MainLayout />,
-      errorElement: <ErrorPage />,
-      children: [
+  const { isLoading, isAuth } = useAppSelector(selectAuth);
+  useAuthorization();
+
+  const router = useMemo(
+    () =>
+      createBrowserRouter([
         {
-          element: <ContentLayout isForm={false} />,
+          path: '/',
+          lazy: lazyMainLayout,
           errorElement: <ErrorPage />,
           children: [
             {
-              index: true,
-              lazy: lazyArticles,
-            },
-            { path: 'articles', lazy: lazyArticles },
-            {
-              path: 'articles/:slug',
-              lazy: lazyArticle,
-            },
-          ],
-        },
-        {
-          element: <ContentLayout isForm={true} />,
-          errorElement: <ErrorPage />,
-          children: [
-            {
-              element: <FormLayout />,
+              element: <ContentLayout isForm={false} />,
               errorElement: <ErrorPage />,
               children: [
                 {
-                  path: 'sign-in',
-                  lazy: lazySignIn,
+                  index: true,
+                  lazy: lazyArticles,
                 },
-
+                { path: 'articles', lazy: lazyArticles },
+                ...privateRoutes(isAuth).articles,
                 {
-                  path: 'sign-up',
-                  lazy: lazySignUp,
-                },
-                {
-                  path: 'profile',
-                  lazy: lazyProfile,
+                  path: 'articles/:slug',
+                  lazy: lazyArticle,
                 },
               ],
             },
+            {
+              element: <ContentLayout isForm={true} />,
+              errorElement: <ErrorPage />,
+              children: [
+                {
+                  element: <FormLayout />,
+                  errorElement: <ErrorPage />,
+                  children: [
+                    ...publicRoutes(isAuth).auth,
+                    ...privateRoutes(isAuth).auth,
+                    {
+                      path: '/*',
+                      element: <Navigate to="/" />,
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              path: '*',
+              element: <NotFoundPage />,
+            },
           ],
         },
-        {
-          path: '*',
-          element: <NotFoundPage />,
-        },
-      ],
-    },
-  ]);
-
+      ]),
+    [isAuth]
+  );
+  if (isLoading) return <PageLoader />;
   return <RouterProvider router={router} fallbackElement={<PageLoader />} />;
 };

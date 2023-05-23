@@ -2,7 +2,7 @@ import styles from './FormWrapper.module.scss';
 import { Form } from 'antd';
 import SubmitButton from '@/components/Elements/Buttons/SubmitButton';
 import { Link } from 'react-router-dom';
-import { FC, ReactFragment } from 'react';
+import { Children, FC, ReactFragment } from 'react';
 import { FormProps } from 'antd/es/form/Form';
 
 interface ExtraLink {
@@ -30,16 +30,32 @@ interface FormWrapperProps extends FormProps<HTMLFormElement> {
   extraLink?: ExtraLink;
   isLoading: boolean;
   children: ReactFragment | JSX.Element;
+  isArticle?: boolean;
 }
 
-const FormWrapper: FC<FormWrapperProps> = ({ isLoading, children, extraLink, title, submitText, ...formFields }) => {
+const FormWrapper: FC<FormWrapperProps> = ({
+  isArticle,
+  isLoading,
+  children,
+  extraLink,
+  title,
+  submitText,
+  ...formFields
+}) => {
   return (
     <div className={styles.root}>
       <header className={styles.header}>{title}</header>
       <div className={styles.form}>
         <Form layout="vertical" requiredMark={false} {...formFields} disabled={isLoading}>
-          {children}
-          <SubmitButton loading={isLoading}>{submitText}</SubmitButton>
+          {Children.map(children, (child, index) => (
+            <div key={index} className={styles.child}>
+              {child}
+            </div>
+          ))}
+          {/*{children}*/}
+          <SubmitButton isArticle={isArticle} size="large" loading={isLoading}>
+            {submitText}
+          </SubmitButton>
         </Form>
       </div>
 

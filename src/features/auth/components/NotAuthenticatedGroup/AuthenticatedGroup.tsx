@@ -1,6 +1,6 @@
 import GreenButton from '@/components/Elements/Buttons/GreenButton';
 import DefaultButton from '@/components/Elements/Buttons/DefaultButton';
-import UserInfo from '../../../../components/Elements/UserInfo';
+import UserPreview from '../../../../components/Elements/UserPreview';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { actionsAuth, selectAuth } from '@/store/reducers/auth';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStoreHooks.ts';
@@ -16,9 +16,11 @@ const AuthenticatedGroup = () => {
   };
   return (
     <>
-      <GreenButton size="small">Create article</GreenButton>
+      <GreenButton size="small">
+        <Link to={'/new-article'}>Create article</Link>
+      </GreenButton>
       <Link to={'/profile'}>
-        <UserInfo author={user} />
+        <UserPreview author={user} />
       </Link>
       <DefaultButton size="large" onClick={logoutFunc}>
         Log Out

@@ -2,7 +2,7 @@ import { Rule } from 'rc-field-form/lib/interface';
 
 export const formRulesHandler = {
   required: (message: string): Rule => {
-    return { required: true, message };
+    return { required: true, message, whitespace: true };
   },
   inRange: (name: string, min: number, max: number): Rule => {
     return {

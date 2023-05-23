@@ -4,7 +4,6 @@ import { AuthState, FormSignInProps, FormSignUpProps } from '@/store/reducers/au
 import { postSignUp } from '@/features/auth/api/postSignUp.ts';
 import { HandleValidateError } from '@/utils/formHandlerHeplers.ts';
 import { postSignIn } from '@/features/auth/api/postSignIn.ts';
-import { getUser } from '@/features/auth/api/getUser.ts';
 import { putEditUser, PutUser } from '@/features/auth/api/putEditUser.ts';
 
 function extraReduceWrapper<R, S extends AuthState, T extends AsyncThunk<R, any, any>>(
@@ -31,15 +30,6 @@ export const signUpAction = createAsyncThunk('auth/sign-up', async (user: FormSi
   } catch (e) {
     const payload = HandleValidateError(e);
     return thunkAPI.rejectWithValue(payload);
-  }
-});
-
-export const getUserAction = createAsyncThunk('auth/get-user', async (arg, thunkAPI) => {
-  try {
-    const result = await getUser();
-    return result.data;
-  } catch (e) {
-    return thunkAPI.rejectWithValue('Ошибка');
   }
 });
 
@@ -76,10 +66,6 @@ export default function (builder: ActionReducerMapBuilder<NoInfer<AuthState>>) {
   const builder3 = extraReduceWrapper(builder2, putEditUserAction, (state, action) => {
     state.form.status = 'succeeded';
     state.user = action.payload.user;
-  });
-  builder3.addCase(getUserAction.fulfilled, (state, action) => {
-    state.user = action.payload.user;
-    state.isAuth = true;
   });
   return builder3;
 }

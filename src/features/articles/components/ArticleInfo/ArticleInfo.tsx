@@ -1,5 +1,5 @@
 import styles from './ArticleInfo.module.scss';
-import UserInfo from '../../../../components/Elements/UserInfo';
+import UserPreview from '../../../../components/Elements/UserPreview';
 import ArticleIntro from '@/features/articles/components/ArticleIntro';
 import { ArticleItem } from '@/features/articles/api/getArticle.ts';
 
@@ -19,7 +19,7 @@ const ArticleInfo = ({ item, isOpened }: ArticleInfoProps) => {
         title={item.title}
         likesAmount={item.favoritesCount}
       />
-      <UserInfo extraInfo={{ slug: item.slug, createdAt: item.createdAt }} author={item.author} />
+      <UserPreview extraInfo={{ slug: item.slug, createdAt: item.createdAt }} author={item.author} />
     </div>
   );
 };

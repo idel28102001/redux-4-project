@@ -1,0 +1,6 @@
+@use '@/style-utils' as u;
+
+.root {
+  height: u.rem(803);
+  flex-grow: 1;
+}

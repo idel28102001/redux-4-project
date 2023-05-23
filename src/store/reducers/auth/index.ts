@@ -4,6 +4,7 @@ import { AsyncStatus } from '@/types';
 import { ErrorDataTypes } from '@/utils/formHandlerHeplers.ts';
 import { UserInfo } from '@/features/auth/api/types.ts';
 import extraReducers from '@/store/reducers/auth/extraReducers.ts';
+import { PutUser } from '@/features/auth/api/putEditUser.ts';
 
 export interface FormSignUpProps {
   username: string;
@@ -18,18 +19,22 @@ export interface FormSignInProps {
   password: string;
 }
 
+export type FormEditUserProps = Partial<PutUser>;
+
 interface FormInfo {
   error: ErrorDataTypes;
   status: AsyncStatus;
 }
 
 export interface AuthState {
+  isLoading: boolean;
   isAuth: boolean;
   form: FormInfo;
   user: UserInfo | null;
 }
 
 const initialState: AuthState = {
+  isLoading: true,
   isAuth: false,
   user: null,
   form: {
@@ -48,6 +53,18 @@ export const authSlice = createSlice({
     },
     setIsAuth: (state, action: PayloadAction<boolean>) => {
       state.isAuth = action.payload;
+    },
+    setFirstLoading: (
+      state,
+      action: PayloadAction<{
+        isLoading: boolean;
+        user: UserInfo | null;
+        isAuth: boolean;
+      }>
+    ) => {
+      state.isAuth = action.payload.isAuth;
+      state.isLoading = action.payload.isLoading;
+      state.user = action.payload.user;
     },
     clearForm: (state) => {
       state.form.status = 'idle';

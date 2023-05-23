@@ -1,0 +1,8 @@
+@use '@/style-utils/index' as u;
+
+.root {
+  align-items: center;
+  padding-inline: u.rem(40) !important;
+  border-radius: u.rem(5) !important;
+  display: flex;
+}

@@ -1,0 +1,15 @@
+@use '@/style-utils/index' as u;
+
+.root {
+}
+
+
+.fields {
+  & > div:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+
+
+

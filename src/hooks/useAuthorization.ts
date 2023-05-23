@@ -1,15 +1,12 @@
-import { useAppDispatch, useAppSelector } from '@/hooks/useStoreHooks.ts';
-import { selectAuth } from '@/store/reducers/auth';
-import { useEffect } from 'react';
-import { getUserAction } from '@/store/reducers/auth/extraReducers.ts';
+import { bindActionCreators } from '@reduxjs/toolkit';
+import { actionsAuth } from '@/store/reducers/auth';
+import { useAppDispatch } from '@/hooks/useStoreHooks.ts';
+import { useLayoutEffect } from 'react';
+import { loadUser } from '@/features/auth/api/loadUser.ts';
 
-export function useAuthorization() {
-  const token = localStorage.getItem('token') || '';
-  const { user } = useAppSelector(selectAuth);
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (!user && token) {
-      dispatch(getUserAction());
-    }
+export const useAuthorization = () => {
+  const { setFirstLoading } = bindActionCreators(actionsAuth, useAppDispatch());
+  useLayoutEffect(() => {
+    loadUser().then((e) => setFirstLoading({ user: e, isLoading: false, isAuth: !!e }));
   }, []);
-}
+};

@@ -1,4 +1,4 @@
-import FormWrapper from '@/components/Elements/FormWrapper';
+import FormWrapper from '../../../../components/Elements/Form/FormWrapper';
 import { Checkbox, Form, Input } from 'antd';
 import { formRulesHandler } from '@/utils/formRulesHandler.ts';
 import { FormSignUpProps } from '@/store/reducers/auth';

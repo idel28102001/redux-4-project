@@ -7,7 +7,15 @@ interface CardProps {
 }
 
 const Card = ({ children, isForm }: CardProps) => {
-  return <div className={classNames(styles.root, { [styles.form]: isForm })}>{children}</div>;
+  return (
+    <div
+      className={classNames(styles.root, {
+        [styles.form]: isForm,
+      })}
+    >
+      {children}
+    </div>
+  );
 };
 
 export default Card;
