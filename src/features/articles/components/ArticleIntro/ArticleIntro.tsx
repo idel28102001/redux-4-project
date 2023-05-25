@@ -1,5 +1,5 @@
 import styles from './ArticleIntro.module.scss';
-import LikeCounter from '@/components/Elements/Counters/LikeCounter';
+import LikeCounter from '../../../favorites/components/LikeCounter';
 import { Link } from 'react-router-dom';
 import * as classNames from 'classnames';
 import Tags from '@/components/Elements/Tags/Tags.tsx';
@@ -7,17 +7,18 @@ import Tags from '@/components/Elements/Tags/Tags.tsx';
 interface ArticleHeadProps {
   title: string;
   likesAmount: number;
+  isFavorited: boolean;
   slug: string;
   isNonActive: boolean;
 }
 
-const ArticleHead = ({ isNonActive, slug, title, likesAmount }: ArticleHeadProps) => {
+const ArticleHead = ({ isNonActive, slug, title, likesAmount, isFavorited }: ArticleHeadProps) => {
   return (
     <>
       <Link to={`/articles/${slug}`} className={classNames(styles.link, { [styles.linkNonActive]: isNonActive })}>
         {title}
       </Link>
-      <LikeCounter amount={likesAmount} />
+      <LikeCounter slug={slug} isFavorited={isFavorited} amount={likesAmount} />
     </>
   );
 };
@@ -26,16 +27,23 @@ interface ArticleInfoProps {
   title: string;
   likesAmount: number;
   isOpened: boolean;
+  isFavorited: boolean;
   description: string;
   tags: string[];
   slug: string;
 }
 
-const ArticleIntro = ({ slug, likesAmount, title, tags, description, isOpened }: ArticleInfoProps) => {
+const ArticleIntro = ({ slug, likesAmount, title, tags, description, isOpened, isFavorited }: ArticleInfoProps) => {
   return (
     <div className={styles.root}>
       <div className={styles.header}>
-        <ArticleHead isNonActive={isOpened} slug={slug} title={title} likesAmount={likesAmount} />
+        <ArticleHead
+          isFavorited={isFavorited}
+          isNonActive={isOpened}
+          slug={slug}
+          title={title}
+          likesAmount={likesAmount}
+        />
       </div>
       <Tags tags={tags} classStyle={classNames({ [styles.isOpened]: isOpened })} />
       <p className={classNames(styles.description, { [styles.isOpened]: isOpened })}>{description}</p>

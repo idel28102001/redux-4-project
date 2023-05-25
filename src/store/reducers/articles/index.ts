@@ -35,6 +35,11 @@ export const articlesSlice = createSlice({
     setPage: (state, action: PayloadAction<number>) => {
       state.page = action.payload;
     },
+    setIsFavorited: (state, action: PayloadAction<{ slug: string; isFavorited: boolean }>) => {
+      const item = state.items.find((e) => e.slug === action.payload.slug);
+      if (!item) return;
+      item.favorited = action.payload.isFavorited;
+    },
   },
   extraReducers(builder) {
     builder

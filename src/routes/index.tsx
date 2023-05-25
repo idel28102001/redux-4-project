@@ -13,6 +13,7 @@ import { useAppSelector } from '@/hooks/useStoreHooks.ts';
 import { useAuthorization } from '@/hooks/useAuthorization.ts';
 import { privateRoutes } from '@/routes/privateRoutes.tsx';
 import { publicRoutes } from '@/routes/publicRoutes.tsx';
+import { action as likeCounterAction } from '@/features/favorites/components/LikeCounter/LikeCounter.tsx';
 
 export const AppRoutes = () => {
   const { isLoading, user } = useAppSelector(selectAuth);
@@ -41,6 +42,10 @@ export const AppRoutes = () => {
               {
                 path: 'articles/:slug',
                 lazy: lazyArticle,
+              },
+              {
+                action: likeCounterAction(author || ''),
+                path: 'articles/:slug/favorite',
               },
               ...privateR.articles,
               ...publicR.articles,

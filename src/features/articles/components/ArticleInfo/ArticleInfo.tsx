@@ -16,6 +16,7 @@ const ArticleInfo = ({ item, isOpened }: ArticleInfoProps) => {
   return (
     <div className={styles.root}>
       <ArticleIntro
+        isFavorited={item.favorited}
         slug={item.slug}
         tags={item.tagList}
         isOpened={isOpened}
