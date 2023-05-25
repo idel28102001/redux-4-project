@@ -1,0 +1,5 @@
+@use '@/style-utils/index' as u;
+
+.root {
+  @include u.button(black-1);
+}

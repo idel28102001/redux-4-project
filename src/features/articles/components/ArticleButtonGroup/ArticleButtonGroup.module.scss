@@ -1,0 +1,8 @@
+@use '@/style-utils' as u;
+
+.root {
+  grid-area: edit;
+  display: flex;
+  gap: u.rem(12);
+  justify-content: flex-end;
+}

@@ -1,0 +1,9 @@
+@use '@/style-utils' as u;
+
+.root {
+}
+
+.button {
+  height: unset !important;
+  padding: u.rem(3.5) u.rem(19) !important;
+}

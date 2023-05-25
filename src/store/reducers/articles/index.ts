@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store';
 import { getArticles } from '@/features/articles/api/getArticles.ts';
 import { AsyncStatus } from '@/types';
-import { ArticleItem } from '@/features/articles/api/getArticle.ts';
+import { ArticleItem } from '@/features/articles/api/types.ts';
 
 export const fetchArticles = createAsyncThunk(
   'articles/fetchArticles',

@@ -13,9 +13,10 @@ interface FormTagItemProps {
   isLast: boolean;
   remove: RemoveFunc;
   add: AddFunc;
+  isDisable?: boolean;
 }
 
-const FormTagItem: FC<FormTagItemProps> = ({ field, isLast, remove, add }) => {
+const FormTagItem: FC<FormTagItemProps> = ({ isDisable, field, isLast, remove, add }) => {
   return (
     <div className={styles.root}>
       <Form.Item
@@ -24,10 +25,16 @@ const FormTagItem: FC<FormTagItemProps> = ({ field, isLast, remove, add }) => {
         noStyle
         {...field}
       >
-        <Input placeholder="Tag" className={styles.input} size="large" />
+        <Input disabled={isDisable} placeholder="Tag" className={styles.input} size="large" />
       </Form.Item>
-      <GhostRedButton onClick={() => remove(field.name)}>Удалить</GhostRedButton>
-      {isLast && <GhostButton onClick={() => add()}>Add tag</GhostButton>}
+      <GhostRedButton disabled={isDisable} onClick={() => remove(field.name)}>
+        Удалить
+      </GhostRedButton>
+      {isLast && (
+        <GhostButton disabled={isDisable} onClick={() => add()}>
+          Add tag
+        </GhostButton>
+      )}
     </div>
   );
 };

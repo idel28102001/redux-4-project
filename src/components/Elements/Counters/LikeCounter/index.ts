@@ -1,1 +1,1 @@
-export { default } from './LikeCounterProps.tsx';
+export { default } from './LikeCounter.tsx';

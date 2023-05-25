@@ -1,0 +1,19 @@
+@use './variables' as u;
+
+@mixin button($color-group) {
+  $group: map-get(u.$button-group, $color-group);
+
+  color: map-get($group, color-1) !important;
+  border-color: map-get($group, color-1) !important;
+  background-color: transparent !important;
+
+  &:hover {
+    color: map-get($group, color-2) !important;
+    border-color: map-get($group, color-2) !important;
+  }
+
+  &:active {
+    color: map-get($group, color-3) !important;
+    border-color: map-get($group, color-3) !important;
+  }
+}

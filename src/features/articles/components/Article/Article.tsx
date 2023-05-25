@@ -1,7 +1,7 @@
 import styles from './Article.module.scss';
 import Card from '@/components/Elements/Card';
 import ArticleInfo from '@/features/articles/components/ArticleInfo';
-import { ArticleItem } from '@/features/articles/api/getArticle.ts';
+import { ArticleItem } from '@/features/articles/api/types.ts';
 
 interface ArticleProps {
   item: ArticleItem;

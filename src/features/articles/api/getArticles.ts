@@ -1,5 +1,5 @@
 import { axios } from '@/lib/axios';
-import { ArticleItem } from '@/features/articles/api/getArticle.ts';
+import { ArticleItem } from '@/features/articles/api/types.ts';
 
 export interface GetArticles {
   articles: ArticleItem[];

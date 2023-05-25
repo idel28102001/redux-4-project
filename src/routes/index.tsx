@@ -11,64 +11,67 @@ import { useMemo } from 'react';
 import { selectAuth } from '@/store/reducers/auth';
 import { useAppSelector } from '@/hooks/useStoreHooks.ts';
 import { useAuthorization } from '@/hooks/useAuthorization.ts';
-import { privateRoutes } from '@/routes/privateRoutes.ts';
-import { publicRoutes } from '@/routes/publicRoutes.ts';
+import { privateRoutes } from '@/routes/privateRoutes.tsx';
+import { publicRoutes } from '@/routes/publicRoutes.tsx';
 
 export const AppRoutes = () => {
-  const { isLoading, isAuth } = useAppSelector(selectAuth);
+  const { isLoading, user } = useAppSelector(selectAuth);
+  const author = user?.username;
   useAuthorization();
 
-  const router = useMemo(
-    () =>
-      createBrowserRouter([
-        {
-          path: '/',
-          lazy: lazyMainLayout,
-          errorElement: <ErrorPage />,
-          children: [
-            {
-              element: <ContentLayout isForm={false} />,
-              errorElement: <ErrorPage />,
-              children: [
-                {
-                  index: true,
-                  lazy: lazyArticles,
-                },
-                { path: 'articles', lazy: lazyArticles },
-                ...privateRoutes(isAuth).articles,
-                {
-                  path: 'articles/:slug',
-                  lazy: lazyArticle,
-                },
-              ],
-            },
-            {
-              element: <ContentLayout isForm={true} />,
-              errorElement: <ErrorPage />,
-              children: [
-                {
-                  element: <FormLayout />,
-                  errorElement: <ErrorPage />,
-                  children: [
-                    ...publicRoutes(isAuth).auth,
-                    ...privateRoutes(isAuth).auth,
-                    {
-                      path: '/*',
-                      element: <Navigate to="/" />,
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              path: '*',
-              element: <NotFoundPage />,
-            },
-          ],
-        },
-      ]),
-    [isAuth]
-  );
+  const router = useMemo(() => {
+    const isAuth = !!author;
+    const privateR = privateRoutes(isAuth, author);
+    const publicR = publicRoutes(isAuth);
+    return createBrowserRouter([
+      {
+        path: '/',
+        lazy: lazyMainLayout,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            element: <ContentLayout isForm={false} />,
+            errorElement: <ErrorPage />,
+            children: [
+              {
+                index: true,
+                lazy: lazyArticles,
+              },
+              { path: 'articles', lazy: lazyArticles },
+              {
+                path: 'articles/:slug',
+                lazy: lazyArticle,
+              },
+              ...privateR.articles,
+              ...publicR.articles,
+            ],
+          },
+          {
+            element: <ContentLayout isForm={true} />,
+            errorElement: <ErrorPage />,
+            children: [
+              {
+                element: <FormLayout />,
+                errorElement: <ErrorPage />,
+                children: [
+                  ...privateR.auth,
+                  ...publicR.auth,
+                  {
+                    path: '/*',
+                    element: <Navigate to="/" />,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: '*',
+            element: <NotFoundPage />,
+          },
+        ],
+      },
+    ]);
+  }, [author]);
   if (isLoading) return <PageLoader />;
   return <RouterProvider router={router} fallbackElement={<PageLoader />} />;
 };

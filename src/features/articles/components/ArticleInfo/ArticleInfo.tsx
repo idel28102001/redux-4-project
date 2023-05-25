@@ -1,7 +1,9 @@
 import styles from './ArticleInfo.module.scss';
 import UserPreview from '../../../../components/Elements/UserPreview';
 import ArticleIntro from '@/features/articles/components/ArticleIntro';
-import { ArticleItem } from '@/features/articles/api/getArticle.ts';
+import { ArticleItem } from '@/features/articles/api/types.ts';
+import ArticleButtonGroup from '@/features/articles/components/ArticleButtonGroup';
+import { useIsAuthor } from '@/hooks/useIsAuthor.ts';
 
 interface ArticleInfoProps {
   isOpened: boolean;
@@ -9,6 +11,8 @@ interface ArticleInfoProps {
 }
 
 const ArticleInfo = ({ item, isOpened }: ArticleInfoProps) => {
+  const isAuthor = useIsAuthor(item.author.username);
+  const buttons = isAuthor && isOpened && <ArticleButtonGroup />;
   return (
     <div className={styles.root}>
       <ArticleIntro
@@ -20,6 +24,7 @@ const ArticleInfo = ({ item, isOpened }: ArticleInfoProps) => {
         likesAmount={item.favoritesCount}
       />
       <UserPreview extraInfo={{ slug: item.slug, createdAt: item.createdAt }} author={item.author} />
+      {buttons}
     </div>
   );
 };

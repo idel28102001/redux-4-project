@@ -6,15 +6,20 @@ import FormTagItems from '@/components/Elements/Form/FormTagItems';
 
 interface FormTagsProps {
   formName: string;
+  isDisable?: boolean;
 }
 
-const FormTags: FC<FormTagsProps> = ({ formName }) => {
+const FormTags: FC<FormTagsProps> = ({ isDisable, formName }) => {
   return (
     <Form.List name={formName}>
       {(fields, { add, remove }) => (
         <div className={styles.fields}>
-          <FormTagItems add={add} remove={remove} fields={fields} />
-          {!fields.length && <GhostButton onClick={() => add()}>Add tag</GhostButton>}
+          <FormTagItems isDisable={isDisable} add={add} remove={remove} fields={fields} />
+          {!fields.length && (
+            <GhostButton disabled={isDisable} onClick={() => add()}>
+              Add tag
+            </GhostButton>
+          )}
         </div>
       )}
     </Form.List>

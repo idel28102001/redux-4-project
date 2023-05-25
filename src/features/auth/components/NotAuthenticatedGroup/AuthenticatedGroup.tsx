@@ -1,10 +1,10 @@
 import GreenButton from '@/components/Elements/Buttons/GreenButton';
-import DefaultButton from '@/components/Elements/Buttons/DefaultButton';
 import UserPreview from '../../../../components/Elements/UserPreview';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { actionsAuth, selectAuth } from '@/store/reducers/auth';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStoreHooks.ts';
 import { Link } from 'react-router-dom';
+import GrayButton from '@/components/Elements/Buttons/GrayButton';
 
 const AuthenticatedGroup = () => {
   const { logout } = bindActionCreators(actionsAuth, useAppDispatch());
@@ -22,9 +22,9 @@ const AuthenticatedGroup = () => {
       <Link to={'/profile'}>
         <UserPreview author={user} />
       </Link>
-      <DefaultButton size="large" onClick={logoutFunc}>
+      <GrayButton size="large" onClick={logoutFunc}>
         Log Out
-      </DefaultButton>
+      </GrayButton>
     </>
   );
 };

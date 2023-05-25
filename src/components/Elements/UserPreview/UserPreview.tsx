@@ -1,7 +1,7 @@
 import styles from './UserPreview.module.scss';
 import { Avatar } from 'antd';
-import { Author } from '@/features/articles/api/getArticles.ts';
 import { formatDate } from '@/utils/format.ts';
+import { Author } from '@/features/articles/api/types.ts';
 
 export interface UserExtraInfo {
   slug: string;

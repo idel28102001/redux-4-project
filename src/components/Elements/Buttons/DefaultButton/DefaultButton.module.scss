@@ -1,17 +1,10 @@
 @use '@/style-utils/index' as u;
 
 .root {
-  color: map-get(u.$palette, color-black-1) !important;
-  border-color: map-get(u.$palette, color-black-1) !important;
-  background-color: transparent !important;
+  height: unset !important;
+  padding: u.rem(3.5) u.rem(10) !important;
+}
 
-  &:hover {
-    color: map-get(u.$palette, color-black-2) !important;
-    border-color: map-get(u.$palette, color-black-2) !important;
-  }
-
-  &:active {
-    color: map-get(u.$palette, color-black-3) !important;
-    border-color: map-get(u.$palette, color-black-3) !important;
-  }
+.big {
+  padding-inline: u.rem(19) !important;
 }

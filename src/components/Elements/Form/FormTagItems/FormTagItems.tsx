@@ -7,14 +7,21 @@ interface FormTagItemsProps {
   fields: FormListFieldData[];
   add: AddFunc;
   remove: RemoveFunc;
+  isDisable?: boolean;
 }
 
-const FormTagItems: FC<FormTagItemsProps> = ({ fields, add, remove }) => {
+const FormTagItems: FC<FormTagItemsProps> = ({ isDisable, fields, add, remove }) => {
   return (
     <>
       {fields.map((field, index) => (
         <Form.Item key={field.key}>
-          <FormTagItem add={add} remove={remove} field={field} isLast={fields.length - 1 === index} />
+          <FormTagItem
+            isDisable={isDisable}
+            add={add}
+            remove={remove}
+            field={field}
+            isLast={fields.length - 1 === index}
+          />
         </Form.Item>
       ))}
     </>

@@ -1,16 +1,17 @@
 import { JSX } from 'react';
-import { Button } from 'antd';
 import { ButtonProps } from 'antd/es/button/button';
+import DefaultButton from '@/components/Elements/Buttons/DefaultButton';
 
 interface RedButtonProps extends ButtonProps {
   children: JSX.Element | string;
+  isBig?: boolean;
 }
 
-const RedButton = ({ children, ...rest }: RedButtonProps) => {
+const RedButton = ({ children, isBig, ...rest }: RedButtonProps) => {
   return (
-    <Button danger {...rest}>
+    <DefaultButton isBig={isBig} danger {...rest}>
       {children}
-    </Button>
+    </DefaultButton>
   );
 };
 

@@ -1,6 +1,6 @@
 import styles from './Articles.module.scss';
 import Article from '@/features/articles/components/Article';
-import { ArticleItem } from '@/features/articles/api/getArticle.ts';
+import { ArticleItem } from '@/features/articles/api/types.ts';
 
 interface ArticlesProps {
   items: Array<ArticleItem>;

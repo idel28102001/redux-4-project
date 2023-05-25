@@ -12,4 +12,18 @@ $palette: (
         color-black-4: #00000080,
         color-black-5: #000000D9,
         color-blue-1: #1890FF,
-)
+);
+
+$button-group: (
+        green-1: (
+                color-1: map-get($palette, color-green-1),
+                color-2:map-get($palette, color-green-2),
+                color-3:map-get($palette, color-green-3),
+        ),
+        black-1: (
+                color-1: map-get($palette, color-black-1),
+                color-2:map-get($palette, color-black-2),
+                color-3:map-get($palette, color-black-3),
+        ),
+);
+
