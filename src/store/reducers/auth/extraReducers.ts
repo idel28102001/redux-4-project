@@ -48,8 +48,6 @@ export const signInAction = createAsyncThunk('auth/sign-in', async (user: FormSi
     const result = await postSignIn({ user });
     return result.data;
   } catch (e) {
-    console.log(e, 1222222);
-    //"ERR_BAD_REQUEST"
     const payload = HandleValidateError(e);
     return thunkAPI.rejectWithValue(payload);
   }

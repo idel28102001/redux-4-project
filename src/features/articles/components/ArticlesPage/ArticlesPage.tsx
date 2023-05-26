@@ -7,7 +7,6 @@ import MessageHOC from '@/hoc/MessageHOC';
 
 const ArticlesPage = () => {
   const { page, setPage, total, items, status, errors } = useArticlesPage();
-  console.log(status);
   const content = status === 'loading' ? <Spinner /> : <Articles items={items} />;
   return (
     <MessageHOC data={errors}>
