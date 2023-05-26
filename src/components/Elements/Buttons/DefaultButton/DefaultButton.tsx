@@ -2,7 +2,7 @@ import { JSX } from 'react';
 import { Button } from 'antd';
 import { ButtonProps } from 'antd/es/button/button';
 import styles from './DefaultButton.module.scss';
-import * as classNames from 'classnames';
+import clsx from 'clsx';
 
 interface DefaultButtonProps extends ButtonProps {
   children: JSX.Element | string;
@@ -11,7 +11,7 @@ interface DefaultButtonProps extends ButtonProps {
 
 const DefaultButton = ({ children, isBig, ...rest }: DefaultButtonProps) => {
   return (
-    <Button className={classNames(styles.root, { [styles.big]: isBig })} {...rest}>
+    <Button className={clsx(styles.root, { [styles.big]: isBig })} {...rest}>
       {children}
     </Button>
   );

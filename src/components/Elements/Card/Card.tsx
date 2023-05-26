@@ -1,5 +1,5 @@
 import styles from './Card.module.scss';
-import * as classNames from 'classnames';
+import clsx from 'clsx';
 
 interface CardProps {
   children: JSX.Element | string | null;
@@ -9,7 +9,7 @@ interface CardProps {
 const Card = ({ children, isForm }: CardProps) => {
   return (
     <div
-      className={classNames(styles.root, {
+      className={clsx(styles.root, {
         [styles.form]: isForm,
       })}
     >
