@@ -1,8 +1,9 @@
 import { AxiosError } from 'axios';
 
-export interface ErrorBody {
+export interface ErrorBody<D = unknown> {
   message: string;
-  status: 'error';
+  status: 'error' | 'success';
+  data?: D;
 }
 
 export async function axiosErrorHandler<T extends () => Promise<D>, D>(cb: T): Promise<D | ErrorBody> {

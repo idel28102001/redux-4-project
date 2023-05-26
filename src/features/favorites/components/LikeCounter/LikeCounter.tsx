@@ -1,8 +1,12 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import LikeButton from '@/components/Elements/Buttons/LikeButton';
 import styles from './LikeCounter.module.scss';
-import { ActionFunctionArgs, redirect, useFetcher } from 'react-router-dom';
+import { ActionFunctionArgs, redirect } from 'react-router-dom';
 import { updateFavorite } from '@/features/favorites/api/updateFavorite.ts';
+import { useOptimisticLikeCounter } from '@/hooks/useOptimsticLikeCounter.ts';
+import { axiosErrorHandler, ErrorBody } from '@/utils/axiosErrorHandler.ts';
+import { ArticleItem } from '@/features/articles/api/types.ts';
+import MessageHOC from '@/hoc/MessageHOC';
 
 interface LikeCounter
   extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
@@ -12,37 +16,26 @@ interface LikeCounter
 }
 
 export function action(author: null | string) {
-  return async function action({ params, request }: ActionFunctionArgs) {
+  return async function action({ params, request }: ActionFunctionArgs): Promise<ErrorBody<ArticleItem> | any> {
     if (!author) return redirect('/sign-in');
-    const slug = params.slug || '';
-    const method = request.method.toLowerCase() as 'post' | 'delete';
-    return updateFavorite(slug, method);
+    return axiosErrorHandler(async () => {
+      const slug = params.slug || '';
+      const method = request.method.toLowerCase() as 'post' | 'delete';
+      const result = await updateFavorite(slug, method);
+      return { status: 'success', data: result.data.article } as ErrorBody<ArticleItem>;
+    });
   };
 }
 
 const LikeCounter = ({ slug, amount, isFavorited, ...rest }: LikeCounter) => {
-  const fetcher = useFetcher();
-
-  let isLiked = isFavorited;
-  if (fetcher.state === 'submitting') {
-    isLiked = !isFavorited;
-  }
-  console.log(fetcher);
-
-  const url = `/articles/${slug}/favorite`;
-  const onClick = useCallback(
-    () =>
-      fetcher.submit(null, {
-        method: !isFavorited ? 'post' : 'delete',
-        action: url,
-      }),
-    [isFavorited]
-  );
+  const { onClick, isSubmitting, isLiked, count, data } = useOptimisticLikeCounter({ amount, isFavorited, slug });
   return (
-    <div className={styles.root}>
-      <LikeButton disabled={fetcher.state === 'submitting'} isLiked={isLiked} onClick={onClick} {...rest} />
-      <span className={styles.amount}>{amount}</span>
-    </div>
+    <MessageHOC data={data}>
+      <div className={styles.root}>
+        <LikeButton disabled={isSubmitting} isLiked={isLiked} onClick={onClick} {...rest} />
+        <span className={styles.amount}>{count}</span>
+      </div>
+    </MessageHOC>
   );
 };
 
