@@ -6,20 +6,23 @@ import { formRulesHandler } from '@/utils/formRulesHandler.ts';
 import { FC } from 'react';
 import { ErrorDataTypes } from '@/utils/formHandlerHeplers.ts';
 import { Article } from '@/features/articles/api/types.ts';
+import { ErrorBody } from '@/utils/axiosErrorHandler.ts';
 
 interface ArticleBlankProps {
   onFinish: (e: Record<string, string | string[]>) => void;
   isSubmitting: boolean;
   errors: ErrorDataTypes;
   defaultData?: Article;
+  dataInfo?: ErrorBody;
 }
 
-const ArticleBlank: FC<ArticleBlankProps> = ({ isSubmitting, onFinish, errors, defaultData }) => {
+const ArticleBlank: FC<ArticleBlankProps> = ({ dataInfo, isSubmitting, onFinish, errors, defaultData }) => {
   const title = defaultData ? 'Edit article' : 'Create new article';
   const buttonText = defaultData ? 'Save' : 'Send';
   return (
     <div className={styles.root}>
       <FormWrapper
+        dataInfo={dataInfo}
         initialValues={defaultData}
         isArticle={true}
         title={title}

@@ -7,15 +7,16 @@ import { setToken } from '@/utils/setToken.ts';
 
 export function useForm<T extends AsyncThunk<ResponseUser, R, any>, R>(action: T) {
   const {
-    form: { status, error: errors },
+    form: { status, error: errorInfo },
   } = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
   const onFinish = (data: R) => {
     dispatch(action(data)).then((e) => {
-      const payload = e.payload as { user: UserInfo };
+      const payload = e.payload as { user?: UserInfo };
+      if (!payload.user) return;
       setToken(payload.user.token);
     });
   };
   useClearForm();
-  return { errors, onFinish, isLoading: status === 'loading' };
+  return { errorInfo, errors: errorInfo.data || {}, onFinish, isLoading: status === 'loading' };
 }

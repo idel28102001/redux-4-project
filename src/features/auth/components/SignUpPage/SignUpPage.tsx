@@ -5,10 +5,11 @@ import { FormSignUpProps } from '@/store/reducers/auth';
 import { useSignUp } from '@/hooks/useFormAuth.ts';
 
 const SignUpPage = () => {
-  const { errors, onFinish, isLoading } = useSignUp();
+  const { errors, onFinish, isLoading, errorInfo } = useSignUp();
   return (
     <FormWrapper
       isLoading={isLoading}
+      dataInfo={errorInfo}
       onFinish={(e) => onFinish(e as never as FormSignUpProps)}
       title="Create new account"
       submitText="Create"

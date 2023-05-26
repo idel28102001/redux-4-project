@@ -5,6 +5,7 @@ import { ErrorDataTypes } from '@/utils/formHandlerHeplers.ts';
 import { UserInfo } from '@/features/auth/api/types.ts';
 import extraReducers from '@/store/reducers/auth/extraReducers.ts';
 import { PutUser } from '@/features/auth/api/putEditUser.ts';
+import { ErrorBody } from '@/utils/axiosErrorHandler.ts';
 
 export interface FormSignUpProps {
   username: string;
@@ -22,7 +23,7 @@ export interface FormSignInProps {
 export type FormEditUserProps = Partial<PutUser>;
 
 interface FormInfo {
-  error: ErrorDataTypes;
+  error: ErrorBody<ErrorDataTypes>;
   status: AsyncStatus;
 }
 
@@ -38,7 +39,7 @@ const initialState: AuthState = {
   isAuth: false,
   user: null,
   form: {
-    error: {},
+    error: { status: 'success', data: null },
     status: 'idle',
   },
 };
@@ -68,7 +69,7 @@ export const authSlice = createSlice({
     },
     clearForm: (state) => {
       state.form.status = 'idle';
-      state.form.error = {};
+      state.form.error = { status: 'success', data: null };
     },
     setUser: (state, action: PayloadAction<UserInfo>) => {
       state.user = action.payload;

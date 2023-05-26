@@ -9,11 +9,12 @@ import {
   useFetcher,
   useLoaderData,
 } from 'react-router-dom';
-import { ErrorDataTypes, HandleValidateError } from '@/utils/formHandlerHeplers.ts';
+import { HandleValidateError } from '@/utils/formHandlerHeplers.ts';
 import { arrayToJSON } from '@/utils/arrayToJSON.ts';
-import { Article } from '@/features/articles/api/types.ts';
+import { Article, ArticleItem } from '@/features/articles/api/types.ts';
 import { getArticle } from '@/features/articles/api/getArticle.ts';
 import { updateArticle } from '@/features/articles/api/updateArticle.ts';
+import { ErrorBody } from '@/utils/axiosErrorHandler.ts';
 
 function doFormatData(formData: FormData) {
   const parsedFormData = Object.fromEntries(formData) as never as Article;
@@ -21,7 +22,7 @@ function doFormatData(formData: FormData) {
   return parsedFormData;
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action({ request, params }: ActionFunctionArgs): Promise<ErrorBody | Response> {
   const formData = await request.formData();
   const parsedFormData = doFormatData(formData) as Article;
   const method = request.method.toLowerCase() as 'put' | 'post';
@@ -56,12 +57,14 @@ const infoSubmit = (fetcher: FetcherWithComponents<any>, data?: Article) => {
 const ArticleBlankPage = () => {
   const fetcher = useFetcher();
   const initialData = useLoaderData() as Article | undefined;
-  const errors: ErrorDataTypes = fetcher.data || {};
+  const errorInfo = fetcher.data as ErrorBody<ArticleItem> | undefined;
+  const errors = errorInfo ? (errorInfo.status === 'error' ? errorInfo.data || {} : {}) : {};
 
   return (
     <div className={styles.root}>
       <Card isForm={true}>
         <ArticleBlank
+          dataInfo={errorInfo}
           defaultData={initialData}
           errors={errors}
           isSubmitting={fetcher.state === 'submitting'}

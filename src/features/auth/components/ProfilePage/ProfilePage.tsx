@@ -8,11 +8,11 @@ import { useEditUser } from '@/hooks/useFormAuth.ts';
 const ProfilePage = () => {
   const { user } = useAppSelector(selectAuth);
   if (!user) throw new Error('There is no user');
-  const { onFinish, isLoading, errors } = useEditUser();
+  const { onFinish, isLoading, errorInfo, errors } = useEditUser();
   const { username, email, image } = user;
-
   return (
     <FormWrapper
+      dataInfo={errorInfo}
       initialValues={{ username, email, image }}
       isLoading={isLoading}
       title="Edit Profile"

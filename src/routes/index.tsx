@@ -44,8 +44,9 @@ export const AppRoutes = () => {
                 lazy: lazyArticle,
               },
               {
-                action: likeCounterAction(author || ''),
+                action: likeCounterAction(author || null),
                 path: 'articles/:slug/favorite',
+                element: <Navigate to=".." relative="path" />,
               },
               ...privateR.articles,
               ...publicR.articles,

@@ -12,6 +12,11 @@ const MessageHOC: FC<MessageHOCProps> = ({ children, data }) => {
   useEffect(() => {
     if (!data) return;
     switch (data.status) {
+      case 'success': {
+        if (!data.message) return;
+        messageApi.success({ type: 'success', content: data.message });
+        break;
+      }
       case 'error':
         messageApi.error({
           type: 'error',

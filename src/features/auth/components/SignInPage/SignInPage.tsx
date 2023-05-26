@@ -5,15 +5,15 @@ import { FormSignInProps } from '@/store/reducers/auth';
 import { useSignIn } from '@/hooks/useFormAuth.ts';
 
 const SignInPage = () => {
-  const { errors, onFinish, isLoading } = useSignIn();
+  const { errors, onFinish, isLoading, errorInfo } = useSignIn();
   return (
     <FormWrapper
+      dataInfo={errorInfo}
       onFinish={(e) => onFinish(e as never as FormSignInProps)}
       isLoading={isLoading}
       title="Sign In"
       submitText="Login"
       extraLink={{ linkTo: '/sign-up', linkText: 'Sign Up', text: "Don' have an account?" }}
-      validateMessages={{ required: '123312312' }}
     >
       <Form.Item
         {...errors['email or password']}

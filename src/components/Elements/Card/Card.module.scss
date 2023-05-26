@@ -7,6 +7,7 @@
   width: 100%;
   box-shadow: 0 u.rem(5) u.rem(9) 0 map-get(u.$palette, color-gray-2);
   padding: u.rem(15) u.rem(14) u.rem(24) u.rem(19);
+  min-height: u.rem(140);
 }
 
 .form {

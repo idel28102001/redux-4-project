@@ -15,11 +15,11 @@ function extraReduceWrapper<R, S extends AuthState, T extends AsyncThunk<R, any,
     .addCase(thunkCB.fulfilled, fulfilledCB)
     .addCase(thunkCB.rejected, (state, action: any) => {
       state.form.status = 'failed';
-      state.form.error = action.payload;
+      state.form.error = { status: 'error', data: action.payload.data, message: action.payload.message };
     })
     .addCase(thunkCB.pending, (state) => {
       state.form.status = 'loading';
-      state.form.error = {};
+      state.form.error = { status: 'success', data: null };
     });
 }
 
@@ -48,6 +48,8 @@ export const signInAction = createAsyncThunk('auth/sign-in', async (user: FormSi
     const result = await postSignIn({ user });
     return result.data;
   } catch (e) {
+    console.log(e, 1222222);
+    //"ERR_BAD_REQUEST"
     const payload = HandleValidateError(e);
     return thunkAPI.rejectWithValue(payload);
   }
@@ -65,6 +67,7 @@ export default function (builder: ActionReducerMapBuilder<NoInfer<AuthState>>) {
   });
   const builder3 = extraReduceWrapper(builder2, putEditUserAction, (state, action) => {
     state.form.status = 'succeeded';
+    state.form.error = { status: 'success', message: 'Profile edit was succeed' };
     state.user = action.payload.user;
   });
   return builder3;
