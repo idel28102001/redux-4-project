@@ -1,1 +1,1 @@
-export { default } from './NotAuthenticatedGroup.tsx';
+export { default } from './AuthenticatedGroup.tsx';
