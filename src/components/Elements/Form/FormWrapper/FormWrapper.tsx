@@ -4,8 +4,7 @@ import SubmitButton from '@/components/Elements/Buttons/SubmitButton';
 import { Link } from 'react-router-dom';
 import { Children, FC, ReactFragment } from 'react';
 import { FormProps } from 'antd/es/form/Form';
-import MessageHOC from '@/hoc/MessageHOC';
-import { ErrorBody } from '@/utils/axiosErrorHandler.ts';
+import { MessageInfo } from '@/utils/axiosErrorHandler.ts';
 
 interface ExtraLink {
   text: string;
@@ -33,7 +32,7 @@ interface FormWrapperProps extends FormProps<HTMLFormElement> {
   isLoading: boolean;
   children: ReactFragment | JSX.Element;
   isArticle?: boolean;
-  dataInfo?: ErrorBody;
+  dataInfo?: MessageInfo;
 }
 
 const FormWrapper: FC<FormWrapperProps> = ({
@@ -43,30 +42,27 @@ const FormWrapper: FC<FormWrapperProps> = ({
   extraLink,
   title,
   submitText,
-  dataInfo,
   ...formFields
 }) => {
   return (
-    <MessageHOC data={dataInfo}>
-      <div className={styles.root}>
-        <header className={styles.header}>{title}</header>
-        <div className={styles.form}>
-          <Form layout="vertical" requiredMark={false} {...formFields} disabled={isLoading}>
-            {Children.map(children, (child, index) => (
-              <div key={index} className={styles.child}>
-                {child}
-              </div>
-            ))}
-            {/*{children}*/}
-            <SubmitButton isArticle={isArticle} size="large" loading={isLoading}>
-              {submitText}
-            </SubmitButton>
-          </Form>
-        </div>
-
-        {extraLink && <ExtraLinkEl item={extraLink} />}
+    <div className={styles.root}>
+      <header className={styles.header}>{title}</header>
+      <div className={styles.form}>
+        <Form layout="vertical" requiredMark={false} {...formFields} disabled={isLoading}>
+          {Children.map(children, (child, index) => (
+            <div key={index} className={styles.child}>
+              {child}
+            </div>
+          ))}
+          {/*{children}*/}
+          <SubmitButton isArticle={isArticle} size="large" loading={isLoading}>
+            {submitText}
+          </SubmitButton>
+        </Form>
       </div>
-    </MessageHOC>
+
+      {extraLink && <ExtraLinkEl item={extraLink} />}
+    </div>
   );
 };
 

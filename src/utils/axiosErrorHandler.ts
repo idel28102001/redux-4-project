@@ -1,19 +1,18 @@
 import { AxiosError } from 'axios';
 
-export type ErrorBody<D = unknown> = {
-  message?: string;
+export type MessageInfo = {
+  message: string;
   status: 'error' | 'success';
-  data?: D | null;
 };
 
-export async function axiosErrorHandler<R, T extends () => Promise<ErrorBody<R> | Response>>(
+export async function axiosErrorHandler<R, T extends () => Promise<MessageInfo | Response | R>>(
   cb: T
-): Promise<ErrorBody<R> | Response> {
+): Promise<MessageInfo | Response | R> {
   try {
     return await cb();
   } catch (e) {
     const isAxiosError = e instanceof AxiosError;
     if (!isAxiosError) throw e;
-    return { message: e.message, status: 'error', data: undefined };
+    return { message: e.message, status: 'error' };
   }
 }

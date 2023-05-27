@@ -1,5 +1,4 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import lazyMainLayout from '@/components/Layout/MainLayout';
 import ContentLayout from '@/components/Layout/ContentLayout';
 import lazyArticles from '@/features/articles/components/ArticlesPage';
 import ErrorPage from '@/features/error/components/ErrorPage';
@@ -14,6 +13,7 @@ import { useAuthorization } from '@/hooks/useAuthorization.ts';
 import { privateRoutes } from '@/routes/privateRoutes.tsx';
 import { publicRoutes } from '@/routes/publicRoutes.tsx';
 import { action as likeCounterAction } from '@/features/favorites/components/LikeCounter/LikeCounter.tsx';
+import lazyMessageMainLayout from '@/features/pop-messages/components/MessageMainLayout';
 
 export const AppRoutes = () => {
   const { isLoading, user } = useAppSelector(selectAuth);
@@ -27,7 +27,7 @@ export const AppRoutes = () => {
     return createBrowserRouter([
       {
         path: '/',
-        lazy: lazyMainLayout,
+        lazy: lazyMessageMainLayout,
         errorElement: <ErrorPage />,
         children: [
           {

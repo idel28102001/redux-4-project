@@ -5,10 +5,9 @@ import { FormSignInProps } from '@/store/reducers/auth';
 import { useSignIn } from '@/hooks/useFormAuth.ts';
 
 const SignInPage = () => {
-  const { errors, onFinish, isLoading, errorInfo } = useSignIn();
+  const { errors, onFinish, isLoading } = useSignIn();
   return (
     <FormWrapper
-      dataInfo={errorInfo}
       onFinish={(e) => onFinish(e as never as FormSignInProps)}
       isLoading={isLoading}
       title="Sign In"

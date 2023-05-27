@@ -2,9 +2,11 @@ import { NoInfer } from 'react-redux';
 import { ActionReducerMapBuilder, AsyncThunk, createAsyncThunk, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { AuthState, FormSignInProps, FormSignUpProps } from '@/store/reducers/auth/index.ts';
 import { postSignUp } from '@/features/auth/api/postSignUp.ts';
-import { HandleValidateError } from '@/utils/formHandlerHeplers.ts';
 import { postSignIn } from '@/features/auth/api/postSignIn.ts';
 import { putEditUser, PutUser } from '@/features/auth/api/putEditUser.ts';
+import { ErrorDataTypes, handleValidateError } from '@/utils/formHandlerHeplers.ts';
+import { AxiosResponse } from 'axios';
+import { ResponseUser } from '@/features/auth/api/types.ts';
 
 function extraReduceWrapper<R, S extends AuthState, T extends AsyncThunk<R, any, any>>(
   builder: ActionReducerMapBuilder<NoInfer<S>>,
@@ -14,44 +16,65 @@ function extraReduceWrapper<R, S extends AuthState, T extends AsyncThunk<R, any,
   return builder
     .addCase(thunkCB.fulfilled, fulfilledCB)
     .addCase(thunkCB.rejected, (state, action: any) => {
+      const typedAction = action as never as PayloadAction<ErrorDataTypes>;
+
       state.form.status = 'failed';
-      state.form.error = { status: 'error', data: action.payload.data, message: action.payload.message };
+      state.form.errors = typedAction.payload;
     })
     .addCase(thunkCB.pending, (state) => {
       state.form.status = 'loading';
-      state.form.error = { status: 'success', data: null };
+      state.form.errors = {};
     });
 }
 
-export const signUpAction = createAsyncThunk('auth/sign-up', async (user: FormSignUpProps, thunkAPI) => {
-  try {
-    const result = await postSignUp({ user });
-    return result.data;
-  } catch (e) {
-    const payload = HandleValidateError(e);
-    return thunkAPI.rejectWithValue(payload);
-  }
-});
+export const asyncAction = <
+  D,
+  R,
+  F extends (args: D) => Promise<AxiosResponse<R, any>> = (args: D) => Promise<AxiosResponse<R, any>>
+>(
+  prefix: string,
+  cb: F,
+  obj: { successMessage: string; errorMessage: string } = { successMessage: 'Success', errorMessage: 'Error' }
+) => {
+  return createAsyncThunk(prefix, async (data: D, thunkAPI) => {
+    try {
+      const result = await cb(data);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      return thunkAPI.fulfillWithValue(result.data, { message: obj.successMessage });
+    } catch (e) {
+      const payload = handleValidateError(e);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      return thunkAPI.rejectWithValue(payload, { message: obj.errorMessage });
+    }
+  });
+};
 
-export const putEditUserAction = createAsyncThunk('auth/put-edit-user', async (user: Partial<PutUser>, thunkAPI) => {
-  try {
-    const result = await putEditUser({ user });
-    return result.data;
-  } catch (e) {
-    const payload = HandleValidateError(e);
-    return thunkAPI.rejectWithValue(payload);
-  }
-});
+export const signUpAction = asyncAction<FormSignUpProps, ResponseUser>(
+  'auth/sign-up',
+  async (user) => {
+    return await postSignUp({ user });
+  },
+  { successMessage: 'You signed up successfully', errorMessage: 'Something went wrong' }
+);
 
-export const signInAction = createAsyncThunk('auth/sign-in', async (user: FormSignInProps, thunkAPI) => {
-  try {
-    const result = await postSignIn({ user });
-    return result.data;
-  } catch (e) {
-    const payload = HandleValidateError(e);
-    return thunkAPI.rejectWithValue(payload);
-  }
-});
+export const signInAction = asyncAction<FormSignInProps, ResponseUser>(
+  'auth/sign-in',
+  async (user) => {
+    return await postSignIn({ user });
+  },
+  { successMessage: 'You logged in successfully', errorMessage: 'Something went wrong' }
+);
+
+export const putEditUserAction = asyncAction<Partial<PutUser>, ResponseUser>(
+  'auth/put-edit-user',
+  async (user) => {
+    return await putEditUser({ user });
+  },
+  { successMessage: 'Edit was success', errorMessage: 'Something went wrong' }
+);
+
 export default function (builder: ActionReducerMapBuilder<NoInfer<AuthState>>) {
   const builder1 = extraReduceWrapper(builder, signUpAction, (state, action) => {
     state.form.status = 'succeeded';
@@ -65,7 +88,6 @@ export default function (builder: ActionReducerMapBuilder<NoInfer<AuthState>>) {
   });
   const builder3 = extraReduceWrapper(builder2, putEditUserAction, (state, action) => {
     state.form.status = 'succeeded';
-    state.form.error = { status: 'success', message: 'Profile edit was succeed' };
     state.user = action.payload.user;
   });
   return builder3;

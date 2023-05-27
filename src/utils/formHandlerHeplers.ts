@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { ErrorBody } from '@/utils/axiosErrorHandler.ts';
+import { MessageInfo } from '@/utils/axiosErrorHandler.ts';
 
 type FormattedErrorData = {
   validateStatus: 'error';
@@ -20,19 +20,21 @@ type InvalidArguments = {
   errors: Record<string, string[]>;
 };
 
-export function HandleValidateError(e: unknown): ErrorBody {
-  const isInstanceOfAxios = e instanceof AxiosError;
-  if (!isInstanceOfAxios) throw e;
-  if (!e.response || !e.response.data.errors) return { data: null, message: e.message, status: 'error' };
-  if (e.code !== 'ERR_BAD_REQUEST' || !e.response) throw new Error('Произошла неизвестная ошибка');
-  const { errors } = e.response.data as InvalidArguments;
-  return { data: formatErrorData(errors), message: e.message, status: 'error' };
+function handleValidate(e: AxiosError): ErrorDataTypes {
+  const result: InvalidArguments | undefined = e?.response?.data as InvalidArguments | undefined;
+  const errors = result ? result.errors || {} : {};
+  return formatErrorData(errors);
 }
 
-export async function trySubmitForm<T extends () => Promise<unknown>>(cb: T) {
-  try {
-    return await cb();
-  } catch (e) {
-    return HandleValidateError(e);
-  }
+function handleMessage(e: AxiosError): MessageInfo {
+  return { message: e.message, status: 'error' };
 }
+
+function getAxiosError(e: unknown): AxiosError {
+  const isInstanceOfAxiosError = e instanceof AxiosError;
+  if (!isInstanceOfAxiosError) throw e;
+  return e;
+}
+
+export const handleMessageError = (e: unknown) => handleMessage(getAxiosError(e));
+export const handleValidateError = (e: unknown) => handleValidate(getAxiosError(e));

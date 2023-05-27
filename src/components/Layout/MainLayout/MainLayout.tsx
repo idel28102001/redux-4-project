@@ -3,10 +3,11 @@ import Head from '../../Head';
 import styles from './MainLayout.module.scss';
 import { Outlet, useNavigation } from 'react-router-dom';
 import Spinner from '@/components/Elements/Loaders/Spinner/Spinner.tsx';
+import { memo } from 'react';
 
 const { Content } = Layout;
 
-const MainLayout = () => {
+const MainLayout = memo(() => {
   const navigation = useNavigation();
   const content = navigation.state === 'loading' ? <Spinner /> : <Outlet />;
   return (
@@ -15,6 +16,6 @@ const MainLayout = () => {
       <Content className={styles.content}>{content}</Content>
     </Layout>
   );
-};
+});
 
 export default MainLayout;

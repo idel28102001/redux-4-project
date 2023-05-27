@@ -4,9 +4,7 @@ import styles from './LikeCounter.module.scss';
 import { ActionFunctionArgs, redirect } from 'react-router-dom';
 import { updateFavorite } from '@/features/favorites/api/updateFavorite.ts';
 import { useOptimisticLikeCounter } from '@/hooks/useOptimsticLikeCounter.ts';
-import { axiosErrorHandler, ErrorBody } from '@/utils/axiosErrorHandler.ts';
-import { ArticleItem } from '@/features/articles/api/types.ts';
-import MessageHOC from '@/hoc/MessageHOC';
+import { axiosErrorHandler } from '@/utils/axiosErrorHandler.ts';
 
 interface LikeCounter
   extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
@@ -16,26 +14,24 @@ interface LikeCounter
 }
 
 export function action(author: null | string) {
-  return async function action({ params, request }: ActionFunctionArgs): Promise<ErrorBody<ArticleItem> | any> {
+  return async function action({ params, request }: ActionFunctionArgs) {
     if (!author) return redirect('/sign-in');
     return axiosErrorHandler(async () => {
       const slug = params.slug || '';
       const method = request.method.toLowerCase() as 'post' | 'delete';
       const result = await updateFavorite(slug, method);
-      return { status: 'success', data: result.data.article } as ErrorBody<ArticleItem>;
+      return result.data.article;
     });
   };
 }
 
 const LikeCounter = ({ slug, amount, isFavorited, ...rest }: LikeCounter) => {
-  const { onClick, isSubmitting, isLiked, count, data } = useOptimisticLikeCounter({ amount, isFavorited, slug });
+  const { onClick, isSubmitting, isLiked, count } = useOptimisticLikeCounter({ amount, isFavorited, slug });
   return (
-    <MessageHOC data={data}>
-      <div className={styles.root}>
-        <LikeButton disabled={isSubmitting} isLiked={isLiked} onClick={onClick} {...rest} />
-        <span className={styles.amount}>{count}</span>
-      </div>
-    </MessageHOC>
+    <div className={styles.root}>
+      <LikeButton disabled={isSubmitting} isLiked={isLiked} onClick={onClick} {...rest} />
+      <span className={styles.amount}>{count}</span>
+    </div>
   );
 };
 

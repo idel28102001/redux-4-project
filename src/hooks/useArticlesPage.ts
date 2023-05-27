@@ -2,12 +2,12 @@ import { useArticlesPagination } from '@/hooks/useArticlesPagination.ts';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStoreHooks.ts';
 import { fetchArticles, selectArticles } from '@/store/reducers/articles';
 import { useEffect } from 'react';
-import { ErrorBody } from '@/utils/axiosErrorHandler.ts';
+import { MessageInfo } from '@/utils/axiosErrorHandler.ts';
 
 export const useArticlesPage = () => {
   const { page, setPage, total } = useArticlesPagination();
   const { items, status } = useAppSelector(selectArticles);
-  const errors: ErrorBody | undefined =
+  const errors: MessageInfo | undefined =
     status === 'failed'
       ? {
           status: 'error',
