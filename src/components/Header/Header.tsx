@@ -1,19 +1,19 @@
-import styles from './Head.module.scss';
-import { Header } from 'antd/es/layout/layout';
+import styles from './Header.module.scss';
+import { Header as Head } from 'antd/es/layout/layout';
 import AuthGroup from '@/features/auth/components/AuthGroup';
 import { Link } from 'react-router-dom';
 
-const Head = () => {
+const Header = () => {
   return (
-    <Header className={styles.root}>
+    <Head className={styles.root}>
       <header className={styles.heading}>
         <Link to="/" className={styles.link}>
           Realworld Blog
         </Link>
       </header>
       <AuthGroup />
-    </Header>
+    </Head>
   );
 };
 
-export default Head;
+export default Header;

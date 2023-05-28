@@ -2,6 +2,7 @@ import { Form, FormListFieldData } from 'antd';
 import { FC } from 'react';
 import FormTagItem from '@/components/Elements/Form/FormTagItem';
 import { AddFunc, RemoveFunc } from '@/components/Elements/Form/FormTagItem/FormTagItem.tsx';
+import styles from './FormTagItems.module.scss';
 
 interface FormTagItemsProps {
   fields: FormListFieldData[];
@@ -12,7 +13,7 @@ interface FormTagItemsProps {
 
 const FormTagItems: FC<FormTagItemsProps> = ({ isDisable, fields, add, remove }) => {
   return (
-    <>
+    <ul className={styles.root}>
       {fields.map((field, index) => (
         <Form.Item key={field.key}>
           <FormTagItem
@@ -24,7 +25,7 @@ const FormTagItems: FC<FormTagItemsProps> = ({ isDisable, fields, add, remove })
           />
         </Form.Item>
       ))}
-    </>
+    </ul>
   );
 };
 

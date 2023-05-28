@@ -1,5 +1,5 @@
 import { Layout } from 'antd';
-import Head from '../../Head';
+import Header from '../../Header';
 import styles from './MainLayout.module.scss';
 import { Outlet, useNavigation } from 'react-router-dom';
 import Spinner from '@/components/Elements/Loaders/Spinner/Spinner.tsx';
@@ -12,7 +12,7 @@ const MainLayout = memo(() => {
   const content = navigation.state === 'loading' ? <Spinner /> : <Outlet />;
   return (
     <Layout className={styles.root}>
-      <Head />
+      <Header />
       <Content className={styles.content}>{content}</Content>
     </Layout>
   );

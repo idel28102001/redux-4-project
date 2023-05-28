@@ -1,4 +1,5 @@
 import { Space, Tag } from 'antd';
+import styles from './Tags.module.scss';
 
 interface TagsProps {
   classStyle: string;
@@ -8,11 +9,13 @@ interface TagsProps {
 const Tags = ({ tags, classStyle }: TagsProps) => {
   return (
     <Space size={[0, 8]} wrap>
-      {tags.map((tag, index) => (
-        <Tag key={index} className={classStyle}>
-          {tag}
-        </Tag>
-      ))}
+      <ul className={styles.list}>
+        {tags.map((tag, index) => (
+          <Tag key={index} className={classStyle}>
+            {tag}
+          </Tag>
+        ))}
+      </ul>
     </Space>
   );
 };
