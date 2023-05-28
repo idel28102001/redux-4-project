@@ -2,9 +2,9 @@ import { useArticlesPagination } from '@/hooks/useArticlesPagination.ts';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStoreHooks.ts';
 import { fetchArticles, selectArticles } from '@/store/reducers/articles';
 import { useEffect } from 'react';
-import { actionThen } from '@/store/reducers/actionHelpers.ts';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { actionsMessage } from '@/store/reducers/message';
+import { actionThen } from '@/store/reducers/actionHelpers.ts';
 
 export const useArticlesPage = () => {
   const { page, setPage, total } = useArticlesPagination();

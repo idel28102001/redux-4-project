@@ -2,10 +2,11 @@ import { ActionResponse } from '@/store/reducers/types.ts';
 import { AxiosResponse } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-type ActionCallback = (message: string) => void;
+type ActionCallback<T = unknown> = (message: string, arg: T) => void;
 export const actionThen = <
-  T,
-  Res extends ActionCallback = ActionCallback,
+  P,
+  A,
+  Res extends ActionCallback<P> = ActionCallback<P>,
   Rej extends ActionCallback = ActionCallback
 >({
   res,
@@ -14,14 +15,15 @@ export const actionThen = <
   res?: Res;
   rej?: Rej;
 }) => {
-  return (e: ActionResponse<T>) => {
+  return (e: ActionResponse<P, A>) => {
+    console.log(e.payload);
     switch (e.meta.requestStatus) {
       case 'fulfilled': {
-        return res && res(e.meta.message || 'Success');
+        return res && res(e.meta.message || 'Success', e.payload as P);
       }
       case 'rejected': {
         if (e.meta.aborted) return;
-        return rej && rej(e.meta.message || 'Reject');
+        return rej && rej(e.meta.message || 'Reject', e.payload);
       }
       default:
         throw new Error('The requestStatus is not recognised');
