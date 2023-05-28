@@ -1,16 +1,13 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store';
-import { getArticles } from '@/features/articles/api/getArticles.ts';
+import { GetArticles, getArticles } from '@/features/articles/api/getArticles.ts';
 import { AsyncStatus } from '@/types';
 import { ArticleItem } from '@/features/articles/api/types.ts';
+import { asyncAction } from '@/store/reducers/actionHelpers.ts';
 
-export const fetchArticles = createAsyncThunk(
-  'articles/fetchArticles',
-  async ({ page, signal }: { page: number; signal: AbortSignal }) => {
-    const response = await getArticles(page, signal);
-    return response.data;
-  }
-);
+export const fetchArticles = asyncAction<number, GetArticles>('articles/fetchArticles', async (page, signal) => {
+  return await getArticles(page, signal);
+});
 
 interface State {
   items: Array<ArticleItem>;

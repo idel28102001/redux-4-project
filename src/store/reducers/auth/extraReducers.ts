@@ -1,12 +1,12 @@
 import { NoInfer } from 'react-redux';
-import { ActionReducerMapBuilder, AsyncThunk, createAsyncThunk, Draft, PayloadAction } from '@reduxjs/toolkit';
+import { ActionReducerMapBuilder, AsyncThunk, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { AuthState, FormSignInProps, FormSignUpProps } from '@/store/reducers/auth/index.ts';
 import { postSignUp } from '@/features/auth/api/postSignUp.ts';
 import { postSignIn } from '@/features/auth/api/postSignIn.ts';
 import { putEditUser, PutUser } from '@/features/auth/api/putEditUser.ts';
 import { ErrorDataTypes, handleValidateError } from '@/utils/formHandlerHeplers.ts';
-import { AxiosResponse } from 'axios';
 import { ResponseUser } from '@/features/auth/api/types.ts';
+import { asyncAction } from '@/store/reducers/actionHelpers.ts';
 
 function extraReduceWrapper<R, S extends AuthState, T extends AsyncThunk<R, any, any>>(
   builder: ActionReducerMapBuilder<NoInfer<S>>,
@@ -17,7 +17,6 @@ function extraReduceWrapper<R, S extends AuthState, T extends AsyncThunk<R, any,
     .addCase(thunkCB.fulfilled, fulfilledCB)
     .addCase(thunkCB.rejected, (state, action: any) => {
       const typedAction = action as never as PayloadAction<ErrorDataTypes>;
-
       state.form.status = 'failed';
       state.form.errors = typedAction.payload;
     })
@@ -27,52 +26,39 @@ function extraReduceWrapper<R, S extends AuthState, T extends AsyncThunk<R, any,
     });
 }
 
-export const asyncAction = <
-  D,
-  R,
-  F extends (args: D) => Promise<AxiosResponse<R, any>> = (args: D) => Promise<AxiosResponse<R, any>>
->(
-  prefix: string,
-  cb: F,
-  obj: { successMessage: string; errorMessage: string } = { successMessage: 'Success', errorMessage: 'Error' }
+const authAction = <R, F, P extends Parameters<typeof asyncAction<R, F>> = Parameters<typeof asyncAction<R, F>>>(
+  prefix: P[0],
+  cb: P[1],
+  success: string
 ) => {
-  return createAsyncThunk(prefix, async (data: D, thunkAPI) => {
-    try {
-      const result = await cb(data);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      return thunkAPI.fulfillWithValue(result.data, { message: obj.successMessage });
-    } catch (e) {
-      const payload = handleValidateError(e);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      return thunkAPI.rejectWithValue(payload, { message: obj.errorMessage });
-    }
+  return asyncAction<R, F>(`auth/${prefix}`, cb, handleValidateError, {
+    successMessage: success,
+    errorMessage: 'Something went wrong',
   });
 };
 
-export const signUpAction = asyncAction<FormSignUpProps, ResponseUser>(
-  'auth/sign-up',
+export const signUpAction = authAction<FormSignUpProps, ResponseUser>(
+  'sign-up',
   async (user) => {
     return await postSignUp({ user });
   },
-  { successMessage: 'You signed up successfully', errorMessage: 'Something went wrong' }
+  'You signed up successfully'
 );
 
-export const signInAction = asyncAction<FormSignInProps, ResponseUser>(
-  'auth/sign-in',
+export const signInAction = authAction<FormSignInProps, ResponseUser>(
+  'sign-in',
   async (user) => {
     return await postSignIn({ user });
   },
-  { successMessage: 'You logged in successfully', errorMessage: 'Something went wrong' }
+  'You logged in successfully'
 );
 
-export const putEditUserAction = asyncAction<Partial<PutUser>, ResponseUser>(
-  'auth/put-edit-user',
+export const putEditUserAction = authAction<Partial<PutUser>, ResponseUser>(
+  'put-edit-user',
   async (user) => {
     return await putEditUser({ user });
   },
-  { successMessage: 'Edit was success', errorMessage: 'Something went wrong' }
+  'Edit was success'
 );
 
 export default function (builder: ActionReducerMapBuilder<NoInfer<AuthState>>) {

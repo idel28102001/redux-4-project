@@ -2,25 +2,27 @@ import { useArticlesPagination } from '@/hooks/useArticlesPagination.ts';
 import { useAppDispatch, useAppSelector } from '@/hooks/useStoreHooks.ts';
 import { fetchArticles, selectArticles } from '@/store/reducers/articles';
 import { useEffect } from 'react';
-import { MessageInfo } from '@/utils/axiosErrorHandler.ts';
+import { actionThen } from '@/store/reducers/actionHelpers.ts';
+import { bindActionCreators } from '@reduxjs/toolkit';
+import { actionsMessage } from '@/store/reducers/message';
 
 export const useArticlesPage = () => {
   const { page, setPage, total } = useArticlesPagination();
   const { items, status } = useAppSelector(selectArticles);
-  const errors: MessageInfo | undefined =
-    status === 'failed'
-      ? {
-          status: 'error',
-          message: 'Something went wrong',
-        }
-      : undefined;
   const dispatch = useAppDispatch();
+  const { setError } = bindActionCreators(actionsMessage, dispatch);
   useEffect(() => {
-    const controller = new AbortController();
-    dispatch(fetchArticles({ page, signal: controller.signal }));
+    const promise = dispatch(fetchArticles(page));
+    promise.then(
+      actionThen({
+        rej: (message) => {
+          setError(message);
+        },
+      })
+    );
     return () => {
-      controller.abort();
+      promise.abort();
     };
   }, [page, dispatch]);
-  return { page, setPage, total, items, status, errors };
+  return { page, setPage, total, items, status };
 };
