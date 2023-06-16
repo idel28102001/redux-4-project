@@ -12,7 +12,7 @@ export const getArticles = (page: number, signal?: AbortSignal) => {
     signal,
     params: {
       limit: 5,
-      offset: page * 5,
+      offset: (page - 1) * 5,
     },
   });
 };
