@@ -9,11 +9,15 @@ type FormattedErrorData = {
 export type ErrorDataTypes = Record<string, FormattedErrorData>;
 
 function formatErrorData(obj: Record<string, string[]>): ErrorDataTypes {
-  const result: Record<string, FormattedErrorData> = {};
-  Object.entries(obj).forEach(([key, value]) => {
-    result[key] = { validateStatus: 'error', help: `${key} ${value.join('. ')}` };
-  });
-  return result;
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [
+      key,
+      {
+        validateStatus: 'error',
+        help: `${key} ${value}`,
+      },
+    ])
+  );
 }
 
 type InvalidArguments = {

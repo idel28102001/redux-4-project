@@ -16,7 +16,6 @@ export const actionThen = <
   rej?: Rej;
 }) => {
   return (e: ActionResponse<P, A>) => {
-    console.log(e.payload);
     switch (e.meta.requestStatus) {
       case 'fulfilled': {
         return res && res(e.meta.message || 'Success', e.payload as P);
